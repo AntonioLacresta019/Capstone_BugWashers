@@ -340,6 +340,59 @@ int main()
             break;
         }
 
+
+             case 4:
+
+        {
+            ifstream in(filename);
+            ofstream out("corrected_text.txt");
+            if (in.is_open() && out.is_open())
+            {
+                while (in >> word)
+                {
+                    wordcount++;
+                    if (spl.searchWord(word))
+                    {
+                        out << word << " ";
+                    }
+                    else
+                    {
+                        vector<string> suggestions = spl.getWordSuggestions(word);
+
+                        if (!suggestions.empty())
+                        {
+                            cout << " \n Suggestions for '" << word << "': \n"
+                                 << endl;
+
+                            for (size_t i = 0; i < suggestions.size(); ++i)
+                            {
+                                cout << i + 1 << ".   " << suggestions[i] << endl;
+                            }
+                            cout << endl;
+                            cout << "Enter the number corresponding to the correct spelling or 0 to keep the original word: ";
+                            int choice;
+                            cin >> choice;
+                            if (choice >= 1 && choice <= suggestions.size())
+                            {
+                                word = suggestions[choice - 1];
+                            }
+                        }
+                        out << word << " ";
+                    }
+                }
+                in.close();
+                out.close();
+            }
+            else
+            {
+                cout << "Unable to open input or output file." << endl;
+                return 1;
+            }
+            cout << endl;
+            cout << "** Text has been corrected and saved to 'corrected_text.txt'. **" << endl;
+            break;
+        }
+
             //--------------------------------------------for auto correct the paragraph--------------------------------//
 
         case 5:
